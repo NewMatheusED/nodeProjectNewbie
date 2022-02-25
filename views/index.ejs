@@ -9,5 +9,12 @@
 <body>
     <h2>Olá <%= nome %>!!</h2>
     <h2>Verificamos que você tem <%= idade %> anos</h2>
+    <ul>
+
+        <%  lista.forEach(function(data) { %>
+            <li><%= data.telefone %></li>
+        <% }) %>
+
+    </ul>
 </body>
 </html>

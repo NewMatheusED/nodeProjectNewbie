@@ -18,8 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res) {
     res.render('index', {
-        'nome': 'Matheus',
-        'idade': '16'
+        'nome': 'Michaela',
+        'idade': '22',
+        'lista': [{'telefone' : '493-487-4817'}, {'telefone' : '596-877-7531'}, {'telefone' : '711-699-7985'}]
     });
 })
 
