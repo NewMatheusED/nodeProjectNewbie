@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const mysql = require('mysql');
 
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -16,14 +17,37 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.get('/', function(req, res) {
-    res.render('index', {
-        'nome': 'Michaela',
-        'idade': '22',
-        'lista': [{'telefone' : '493-487-4817'}, {'telefone' : '596-877-7531'}, {'telefone' : '711-699-7985'}]
-    });
+//Coneção com o banco de dados
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'node'
+});
+
+db.connect(function(err) {
+    if(err) console.log('Erro na conexão com o banco de dados');
+    else console.log('Conexão com o banco de dados estabelecida');
 })
 
-app.get('/sobre', function(req, res) {
-    res.render('sobre', {})
+
+app.get('/', function(req, res) {
+    let sql = 'SELECT * FROM `clientes`';
+    let query = db.query(sql, function(err, results) {
+        res.render('index', {lista: results});
+    })
+})
+
+app.get('/registrar', function(req, res) {
+    res.render('cadastro', {});
+})
+
+app.post('/registrar', function(req, res) {
+    console.log('Cadastro realizado com sucesso');
+    let sql = 'INSERT INTO clientes (nome, sobrenome, empresa) VALUES (?,?,?)'
+    let nome = req.body.nome;
+    let sobrenome = req.body.sobrenome;
+    let empresa = req.body.empresa;
+    db.query(sql ,[nome, sobrenome, empresa], (err, results) => {})
+    res.render('cadastro', {})
 })
